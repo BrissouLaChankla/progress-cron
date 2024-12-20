@@ -1,0 +1,27 @@
+name: Run Node Script Daily
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # Exécute tous les jours à minuit (UTC)
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20' # Assurez-vous que cette version correspond à celle utilisée par votre projet
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Run script
+      env:
+        CONNECTION_STRING: ${{ secrets.CONNECTION_STRING }}
+        RIOT_API_KEY: ${{ secrets.RIOT_API_KEY }}
+      run: node index.js
